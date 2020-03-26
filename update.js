@@ -2,7 +2,7 @@ const loadData = require("./lib/scraper").loadData;
 const { firestore, Timestamp } = require("./lib/firebase");
 const { generateCaseId } = require("./lib/utils");
 
-(async () => {
+const Update = async () => {
   let data = await loadData();
   const caseId = generateCaseId();
 
@@ -13,4 +13,11 @@ const { generateCaseId } = require("./lib/utils");
       data,
       updatedAt: Timestamp.fromMillis(Date.now())
     });
-})().catch(console.error);
+};
+
+if (require.main === module) {
+  module.exports = Update;
+} else {
+  Update().catch(console.error);
+}
+
