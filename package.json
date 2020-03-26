@@ -1,0 +1,14 @@
+{
+  "name": "nCov-19",
+  "version": "1.0.0",
+  "description": "Tracking nCov-19 data",
+  "main": "index.js",
+  "author": "Hanut Singh Gusain",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "firebase-admin": "^8.10.0",
+    "needle": "^2.3.3"
+  }
+}
