@@ -1,19 +1,26 @@
-const { firestore, Timestamp } = require("./lib/firebase");
-const { generateCaseId, getDeathMaxMin, getMortIndex, getRecovIndex } = require("./lib/utils");
-const Update = require("./update");
+const express = require("express");
+const app = express();
+const bodyParser = require('body-parser');
+const morgan = require("morgan");
+const router = require('./lib/router');
+const PORT = process.env.NCOV_19_PORT || 3001;
 
-(async () => {
-  const caseId = generateCaseId();
+/**
+ * Middleware section
+ */
+app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms")
+);
 
-  let docRef = firestore.collection("cases").doc(caseId);
-  let doc = await docRef.get();
-  if (!doc.exists) {
-    await Update();
-  }
-  let { data } = doc.data();
-  let {deathMax, deathMin} = getDeathMaxMin(data); 
-  let mortIndex = getMortIndex(data);
-  let recovIndex = getRecovIndex(data);
-  let India = data.find(({country}) => country === 'India');
-  console.log(India)
-})().catch(console.error);
+/**
+ * Routing
+ */
+app.get("/health", (req, res) => res.send("ok"))
+app.use('/api', router);
+
+/**
+ * Begin listening
+ */
+app.listen(PORT, () => console.log(`nCov-19-Tracker listening on ${PORT}!`));
